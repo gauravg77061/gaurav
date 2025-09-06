@@ -1,28 +1,49 @@
 const express=require('express');
 const app=express();
+//error handlingg 
 
-const {isAuth,isUser}= require('./middlleware/auth');
+//aese mmen error handle kar sakta hu 
 
-// class  4 kaa 
+// app.get("/getUserData",(req,res)=>{
+//     throw new Error("ffofkfj");
+//     res.send("User Data send ");
+    
+// })
 
-app.use('/admin',isAuth);
 
-app.use('/user/login' ,(req,res)=>{
-    res.send('login successfuly');
-})
+// app.use("/get",(err,req,res,next)=>{
+//     if(err){
+// res.status(500).send("something went wrong ");
+//     }
+// });
 
-app.get('/admin/user',(req,res)=>{
-    res.send('All user data');
-})
+// const {isAuth,isUser}= require('./middlleware/auth');
 
-app.get('/admin/delete',(req,res)=>{
-    res.send("user deleted");
-})
+// // class  4 kaa 
 
-app.get('/user/data',isUser,(req,res)=>{
-    console.log('data ');
-    res.send('User Data');
-})
+// app.use('/admin',isAuth);
+// //sko lkhne se niiche wala nahi chalega 
+
+// app.use('/user',(req,res)=>{
+//     res.send('ab ye sab user se match ho jayega ar user kaa kuch nahi chalege');
+// })
+
+// app.use('/user/login' ,(req,res)=>{
+//     res.send('login successfuly');
+// })
+
+// app.get('/admin/user',(req,res)=>{
+//     res.send('All user data');
+// })
+
+// app.get('/admin/delete',(req,res)=>{
+//     res.send("user deleted");
+// })
+
+// app.get('/user/data',isUser,(req,res)=>{
+//     console.log('data ');
+//     res.send('User Data');
+// })
 
 
 // class 3
