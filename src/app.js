@@ -5,8 +5,14 @@ const User = require('./models/user');
 const {validatorSingupData}= require('./util/validation');
 const bcrypt=require('bcrypt');
 const validator = require('validator');
+const jwt= require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const {userAuth}=require('./middlleware/auth');
+
 
 const app=express();
+
+app.use(cookieParser());
 
 app.use(express.json());
 
@@ -41,24 +47,7 @@ app.post("/signup",async(req,res)=>{
         console.error(error.message);
     }
 })
-//fetching user by email or GET API to fetch single user
 
-app.get('/user', async(req,res)=>{
-    const userEmail=req.body.emailId;
-    try {
-        
-        const user =await User.find({emailId:userEmail});
-        if(user.length === 0){
-           throw new Error("User not  found!");
-           
-        }
-        else {
-            res.send(user);
-        }
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
-})
 
 // login
 
@@ -80,9 +69,14 @@ app.post('/login',async(req,res)=>{
             
         }
 
-        const isPassword = await bcrypt.compare(password,user.password);
+        const isPassword = await user.validatePassword(password);
 
         if(isPassword){
+            //ye token aa raha h user model se 
+           const token=await user.getJwt();
+
+            res.cookie("token",token);
+
             res.send("Login successfully");
         }
         else{
@@ -95,51 +89,35 @@ app.post('/login',async(req,res)=>{
     }
 })
 
-// fetching all the user by get api
+// get rofile details
 
-app.get('/feed',async(req,res)=>{
+app.get('/profile',userAuth,async(req,res) =>{
+
     try {
-        const user=await User.find({});
-       
-        res.send(user);
+
+       const user = req.user;
+
+       res.send(user);
+
+        
     } catch (error) {
-        res.status(400).send(error.message);
-    }
-})
-//delete 
-app.delete('/delete',async(req,res) =>{
-    const userId=req.body.userId;
-    try {
-        const user = await User.findByIdAndDelete(userId);
-        res.send("User deleted successfully");
-    } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send("error"+error.message);
     }
 })
 
-// find by id and update 
-app.patch('/user',async(req,res)=>{
 
-    //isme mujhe manually hatani pad rahi h user id 
-    const userId = req.body.userId;
-    const data= {...req.body};
-     delete data.userId; 
-     // destructure am mein apne app remove kar deta h
-     // const {userId,...data}=req.body;
+// sending cnnection request and details of person of send the request
+
+app.post('/sendingConnectionRequest',userAuth,async(req,res)=>{
+
     try {
 
-        //kya kya cheez update karne ke liye allowed 
-        const allowed_update=["photoUrl","gender","age","skills"];
+        //yaha par ye req.user verify ho kar middleware se aa raha h
+        const user=req.user;
 
-        const isAllowed= Object.keys(data).every(k=>allowed_update.includes(k));
-        if(!isAllowed){
-throw new Error("update not allowed");
-        }
-
-        const user = await User.findOneAndUpdate( {_id:userId} , data, { new: true ,runValidators:true});
-        res.send("User updated successfully");
+    res.send(user.firstName + " sent the connection request");
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).send("Error " +error.message);
     }
 })
 

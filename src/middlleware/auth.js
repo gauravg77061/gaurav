@@ -1,24 +1,36 @@
-const isAuth =(req,res,next)=>{
-    const token ='xyz';
-    const isAuthe= token ==='xyz';
-    if(!isAuthe){
-        res.status(401).send('unauth');
-    }
-    else{
+
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';   // .js extension likhna mat bhoolna
+import cookieParser from 'cookie-parser';
+
+
+
+const userAuth= async(req, res,next)=>{
+    try {
+        const {token}=req.cookies;
+        //console.log(token);
+
+        const decodedMessage = await jwt.verify(token,"DEV@Tinder$790");
+
+        const {_id}=decodedMessage;
+
+        const user =await User.findById({_id});
+
+        //console.log(_id);
+
+        if(!user){
+            throw new Error('Errorin finding user id');
+        }
+
+        req.user =user;
+
         next();
+
+    } catch (error) {
+        res.status(400).send("Error message "+error.message);
     }
 }
-const isUser=(req,res,next)=>{
-    const token='abc';
-    const isUserAuth= token === 'abc';
-    if(!isUserAuth){
-        res.status(401).send('not a User ');
-    }
-    else{
-        next();
-    }
-}
+
 export{
-    isAuth,
-    isUser,
+    userAuth
 }
