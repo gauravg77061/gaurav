@@ -107,10 +107,25 @@ authRouter.post('/login',async(req,res)=>{
         }
 
     } catch (error) {
-        
+
         res.status(400).send('Error '+error.message);
     }
 
+})
+
+//logout 
+
+authRouter.post('/logout',async(req,res)=>{
+
+    try {
+        res.cookie("token",null,{
+        expires:new Date(Date.now()),
+    });
+    res.send("Logout successfully");
+    } catch (error) {
+        res.status(400).send("error "+ error.message);
+    }
+    
 })
 
 
