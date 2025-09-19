@@ -117,7 +117,12 @@ authRouter.post('/login',async(req,res)=>{
 
 authRouter.post('/logout',async(req,res)=>{
 
+    //No need of authentication here for logout 
+
     try {
+
+        //expiring cookie changing date to date now
+
         res.cookie("token",null,{
         expires:new Date(Date.now()),
     });
