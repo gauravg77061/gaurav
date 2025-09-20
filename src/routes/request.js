@@ -1,17 +1,22 @@
 const express=require('express');
 const { userAuth } = require('../middlleware/auth');
-const connectionRequest=require('../models/connectionRequest');
+const ConnectionRequest=require('../models/connectionRequest');
 const  User  = require('../models/user');
 
 const requestRouter=express.Router();
 
 requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
     try {
-        
+        // user geting from auth after authentication
         const fromUserId=req.user;
+
+        // parameters se pass kiya h id 
+        //jisko hame request bhejni h
 
 
         const toUserId=req.params.toUserId;
+
+        //same for status
 
         const status=req.params.status;
 
@@ -29,7 +34,7 @@ requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
         //toh user A->B ko send naa kar paaye 
         // same user B->A ko wapis naa kar paaye 
 
-        const existingUser=await connectionRequest.findOne({
+        const existingUser=await ConnectionRequest.findOne({
             $or:[
                 {fromUserId,toUserId},
                 {fromUserId:toUserId,toUserId:fromUserId}
@@ -65,17 +70,22 @@ requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
             });
         }
 
-       
+       //creating new entity for  db after passing all the validation
 
 
-        const newconnectionRequest=new connectionRequest({
+        const newconnectionRequest=new ConnectionRequest({
             fromUserId,
             toUserId,
             status,
 
         });
 
+            //saving data 
+
+
         const data=await newconnectionRequest.save();
+
+        //sending response
 
         res.json({
             message:"connection request send successfully",
@@ -84,6 +94,52 @@ requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
 
     } catch (error) {
         res.status(400).send("error"+error.message);
+    }
+})
+
+requestRouter.post('/review/:status/:requestId',userAuth,async(req,res) =>{
+    try {
+        const loggedInUser=req.user;
+
+        console.log(loggedInUser);
+
+        const {status,requestId} =req.params ;
+
+        const allowedStatus=['Interested','Ignored'];
+
+        if(!allowedStatus.includes(status)){
+            return res.status(400).json({
+                message:'Status not allowed'
+            });
+        }
+
+        const connectRequest=await ConnectionRequest.findOne({
+            fromUserId:requestId,
+            toUserId:loggedInUser,
+            status:"Interested"
+        })
+       // console.log(loggedInUser);
+
+       if(!connectRequest){
+        return res.status(400).json({
+            message:'Request not found'
+        });
+       }
+
+       connectRequest.status='Accepted';
+
+       const data = await connectRequest.save();
+
+       res.json({
+        message:'Request'+data.status+'Successfully',
+        data,
+       });
+
+    } catch (error) {
+        return res.status(400).json({
+            message:"error"+
+            error.message
+        });
     }
 })
 
