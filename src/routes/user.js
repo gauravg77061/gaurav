@@ -108,42 +108,7 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
     }
 })
 
-// userRouter.get('/feed', userAuth, async (req, res) => {
-//   try {
-//     const loggedInUser = req.user;
 
-//     // 1️⃣ Fetch all connection requests where logged-in user is involved
-//     const connectRequest = await ConnectionRequest.find({
-//       $or: [
-//         { fromUserId: loggedInUser._id },
-//         { toUserId: loggedInUser._id }
-//       ]
-//     }).select("fromUserId toUserId");
-
-//     // 2️⃣ Build a set of all users to hide (already connected or requested)
-//     const hideAllUser = new Set();
-
-//     connectRequest.forEach(element => {
-//       // Add the other user only (ignore logged-in user itself)
-//       if (element.fromUserId.toString() !== loggedInUser._id.toString())
-//         hideAllUser.add(element.fromUserId.toString());
-//       if (element.toUserId.toString() !== loggedInUser._id.toString())
-//         hideAllUser.add(element.toUserId.toString());
-//     });
-
-//     // 3️⃣ Fetch all users who are NOT in hideAllUser and NOT self
-//     const users = await User.find({
-//       _id: { $in: Array.from(hideAllUser).concat(loggedInUser._id.toString()) }
-//     }).select(safeData);
-
-//     res.send(users);
-
-//   } catch (error) {
-//     res.status(400).json({
-//       message: error.message
-//     });
-//   }
-// });
 
 
 

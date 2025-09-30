@@ -96,7 +96,7 @@ authRouter.post('/login',async(req,res)=>{
             
             //sending status
 
-            res.send("Login successfully");
+            res.send(user);
 
         }
         else{
