@@ -101,7 +101,7 @@ requestRouter.post('/review/:status/:requestId',userAuth,async(req,res) =>{
     try {
         const loggedInUser=req.user;
 
-        console.log(loggedInUser);
+      //  console.log(loggedInUser);
 
         const {status,requestId} =req.params ;
 

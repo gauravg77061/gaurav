@@ -4,7 +4,7 @@ const ConnectionRequest = require('../models/connectionRequest');
 const User = require('../models/user');
 const userRouter=express.Router();
 
-const safeData= ["firstName","lastName","age","skills","about"];
+const safeData= ["firstName","lastName","age","skills","about","photoUrl","gender"];
 
 // all the request sent to me 
 
@@ -15,7 +15,7 @@ userRouter.get('/request/recived',userAuth,async(req,res)=>{
         const connectRequest = await ConnectionRequest.find({
             toUserId:loggedInUser,
             status:'Interested'
-        }).populate('fromUserId',safeData);
+        }).populate('fromUserId',safeData); 
 
         res.json({
             message:'Data fetched successfully',
@@ -88,7 +88,7 @@ userRouter.get('/feed',userAuth,async(req,res)=>{
             hideAllUser.add(element.toUserId.toString());
         });
 
-        console.log(hideAllUser);
+//        console.log(hideAllUser);
 
         const users=await User.find({
             $and:[

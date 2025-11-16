@@ -16,7 +16,7 @@ authRouter.post('/signup',async(req,res)=>{
         
         const{firstName,lastName,emailId,password} = req.body;
 
-        // Ihave created another file for the validation in utils folder 
+        // I have created another file for the validation in utils folder 
          validatorSingupData(req);
          
 

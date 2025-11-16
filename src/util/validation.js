@@ -14,6 +14,19 @@ throw new Error("Inavlid credentials");
     }
 
 }
+
+const validateEditProfileData= (req)=>{
+    const allowedEditFields=["firstName","lastName","emailId","skills","photoUrl","about","gender","age"];
+
+    const isEditAllowed=Object.keys(req.body).every((field) =>allowedEditFields.includes(field));
+    return isEditAllowed;
+
+};
+
+
+
 module.exports={
  validatorSingupData,
+ validateEditProfileData,
+ 
 }
