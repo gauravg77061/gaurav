@@ -22,7 +22,7 @@ requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
 
         // validation 1 - status in dono mein se kuch hona chaiye 
 
-        const allowedStatus=["Interested","Ignored"];
+       const allowedStatus = ["ignored", "interested"];
 
         if(!allowedStatus.includes(status)){
             return res.status(400).json({
@@ -97,51 +97,95 @@ requestRouter.post('/send/:status/:toUserId',userAuth,async(req,res)=>{
     }
 })
 
-requestRouter.post('/review/:status/:requestId',userAuth,async(req,res) =>{
+// requestRouter.post('/review/:status/:requestId',userAuth,async(req,res) =>{
+//     try {
+//         const loggedInUser=req.user;
+
+//       //  console.log(loggedInUser);
+
+//         const {status,requestId} =req.params ;
+
+//         const allowedStatus=['accepted','rejected'];
+
+//         if(!allowedStatus.includes(status)){
+//             return res.status(400).json({
+//                 message:'Status not allowed'
+//             });
+//         }
+
+//         const connectionRequest=await ConnectionRequest.findOne({
+//             fromUserId:requestId,
+//             toUserId:loggedInUser,
+//             status:"interested"
+//         })
+//        console.log(loggedInUser);
+
+// //        const connectRequest = await ConnectionRequest.findOne({
+// //     fromUserId: requestId,
+// //     toUserId: loggedInUser._id,
+// //     status: "Interested"
+// // });
+
+
+//        if(!connectionRequest){
+//         return res.status(400).json({
+//             message:'Request not found'
+//         });
+//        }
+
+//        connectionRequest.status=status;
+
+//        const data = await connectonRequest.save();
+
+//        res.json({
+//         message:'Request'+data.status+'Successfully',
+//         data,
+//        });
+
+//     } catch (error) {
+//         return res.status(400).json({
+//             message:"error"+
+//             error.message
+//         });
+//     }
+// })
+
+
+requestRouter.post(
+  "/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
     try {
-        const loggedInUser=req.user;
+      const loggedInUser = req.user;
+      const { status, requestId } = req.params;
 
-      //  console.log(loggedInUser);
+      const allowedStatus = ["accepted", "rejected"];
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).json({ messaage: "Status not allowed!" });
+      }
 
-        const {status,requestId} =req.params ;
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+      if (!connectionRequest) {
+        return res
+          .status(404)
+          .json({ message: "Connection request not found" });
+      }
 
-        const allowedStatus=['Interested','Ignored'];
+      connectionRequest.status = status;
 
-        if(!allowedStatus.includes(status)){
-            return res.status(400).json({
-                message:'Status not allowed'
-            });
-        }
+      const data = await connectionRequest.save();
 
-        const connectRequest=await ConnectionRequest.findOne({
-            fromUserId:requestId,
-            toUserId:loggedInUser,
-            status:"Interested"
-        })
-       // console.log(loggedInUser);
-
-       if(!connectRequest){
-        return res.status(400).json({
-            message:'Request not found'
-        });
-       }
-
-       connectRequest.status='Accepted';
-
-       const data = await connectRequest.save();
-
-       res.json({
-        message:'Request'+data.status+'Successfully',
-        data,
-       });
-
-    } catch (error) {
-        return res.status(400).json({
-            message:"error"+
-            error.message
-        });
+      res.json({ message: "Connection request " + status, data });
+    } catch (err) {
+      res.status(400).send("ERROR: " + err.message);
     }
-})
+  }
+);
+
 
 module.exports = requestRouter;
 
