@@ -44,8 +44,16 @@ authRouter.post('/signup',async(req,res)=>{
             password:hashPassword
         })
 
-await user.save();
-res.send('signup successfully');
+const savedUser=await user.save();
+
+  const token=await user.getJwt();
+
+            //sending cookie with request
+
+            res.cookie("token",token);
+            
+
+res.json({message:'signup successfully' , data:savedUser});
 
     } catch (error) {
         res.status(400).send("Error"+error.message);
