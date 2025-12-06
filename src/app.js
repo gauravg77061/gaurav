@@ -12,6 +12,7 @@ const authRouter=require ('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const userRouter = require('./routes/user');
+require("dotenv").config();
 const cors=require('cors');
 
 const app=express();
@@ -55,7 +56,7 @@ then(()=>{
     //first connect with db
     console.log('Data base connected successfully');
     // than connect with server
-    app.listen(3000,()=>{
+    app.listen(process.env.PORT,()=>{
     console.log("server is running at port number 3000")
 })
 })
