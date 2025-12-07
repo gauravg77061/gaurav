@@ -14,6 +14,7 @@ const requestRouter = require('./routes/request');
 const userRouter = require('./routes/user');
 require("dotenv").config();
 const cors=require('cors');
+const paymentRouter = require('./routes/payment');
 
 const app=express();
 
@@ -33,6 +34,8 @@ app.use('/profile',profileRouter);
 app.use('/request',requestRouter);
 
 app.use('/user',userRouter);
+
+app.use('/payment',paymentRouter);
 
 // sending cnnection request and details of person of send the request
 
