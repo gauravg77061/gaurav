@@ -1,0 +1,28 @@
+[33mb274fce[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m bug fix
+[33m0ea8539[m fix
+[33m8c23b4c[m u fix
+[33m537bd0c[m IsPremium
+[33m895310b[m update
+[33md8edc56[m updated
+[33m73cea48[m .env remove
+[33ma489ea1[m update
+[33m587716a[m razor-pay
+[33m84ec1ca[m added env file
+[33m336546e[m updated code
+[33mdffe1d9[m chnages in api
+[33m8c762d0[m update api
+[33mbd12433[m cors
+[33m7dde5af[m feed api correct working code
+[33meffc2f2[m feed,AllConnectionRequest
+[33m5ce1e34[m sending Connection request
+[33m29c341e[m logout Route
+[33mb169d64[m new way to write routes
+[33m906bec2[m cookies and best practice to write code
+[33mced5470[m bcrypt and logiin api
+[33mb6cc028[m all routes done
+[33mdb9f82b[m database connection and signup
+[33m0d57ab1[m error handling
+[33m5a545c0[m middleware
+[33m2b6d6ff[m http request exploring get post ,delete ,post etc
+[33m3a7fadc[m Created a server
+[33m9a6232b[m Fix .gitignore and untrack node_modules

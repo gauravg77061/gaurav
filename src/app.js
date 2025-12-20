@@ -15,7 +15,9 @@ const userRouter = require('./routes/user');
 require("dotenv").config();
 const cors=require('cors');
 const paymentRouter = require('./routes/payment');
-
+const http=require("http");
+const initializeSocket = require('./util/socket');
+const chatRouter = require('./routes/chat');
 const app=express();
 
 app.use(cors({
@@ -37,6 +39,8 @@ app.use('/user',userRouter);
 
 app.use('/payment',paymentRouter);
 
+app.use('/chat',chatRouter);
+
 // sending cnnection request and details of person of send the request
 
 // app.post('/sendingConnectionRequest',userAuth,async(req,res)=>{
@@ -52,14 +56,16 @@ app.use('/payment',paymentRouter);
 //     }
 // })
 
+const server=http.createServer(app);
 
+initializeSocket(server);
 
 connectDB().
 then(()=>{
     //first connect with db
     console.log('Data base connected successfully');
     // than connect with server
-    app.listen(process.env.PORT,()=>{
+    server.listen(process.env.PORT,()=>{
     console.log("server is running at port number 3000")
 })
 })

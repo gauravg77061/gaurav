@@ -36,7 +36,7 @@ const UserSchema=  new mongoose.Schema({
     },
     photoUrl:{
         type:String,
-         default: "https://img.freepik.com/free-vector/web-development-programmer-engineering-coding-website-augmented-reality-interface-screens-developer-project-engineer-programming-software-application-design-cartoon-illustration_107791-3863.jpg?semt=ais_hybrid&w=740&q=80"
+         default: ""
          
 
     },
